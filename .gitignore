@@ -1,1 +1,9 @@
+.ipynb_checkpoints/
+
 *.pyc
+
+#Dataset
+dogImages.zip
+dogImages/
+lfw.zip
+lfw/
