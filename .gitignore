@@ -7,3 +7,6 @@ dogImages.zip
 dogImages/
 lfw.zip
 lfw/
+
+#model artifacts
+*.pt
