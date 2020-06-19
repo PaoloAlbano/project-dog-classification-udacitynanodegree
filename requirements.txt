@@ -5,4 +5,3 @@ torch==1.5.0+cpu
 torchvision==0.6.1+cpu
 Pillow==7.1.2
 matplotlib==3.2.1
-gunicorn

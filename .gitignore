@@ -11,4 +11,4 @@ lfw.zip
 lfw/
 
 #model artifacts
-*.pt
+model_scratch.pt
