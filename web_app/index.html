@@ -1,0 +1,170 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	   <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+	<style>
+	.rcorners2 {
+  border-radius: 25px;
+  border: 2px solid #4dd0e1;
+  padding: 20px;
+  padding-left: 5px;
+}
+
+ .row-full{
+ width: 100vw;
+ position: relative;
+ margin-left: -50vw;
+ height: 500px;
+ margin-top: 100px;
+ left: 50%;
+}
+
+	#overdiv1{
+		z-index: 111;
+		background: rgb(25,31,38);
+		opacity: 0.90;
+		filter: alpha(opacity=100);
+		position:fixed;
+		top:0px;
+		bottom:0px;
+		left:0px;
+		right:0px;
+		float: left;
+
+		overflow-y:auto;
+		overflow-x:hidden;
+
+	}
+
+	#overdiv2{
+		z-index : 112;
+		opacity: 1;
+		filter: alpha(opacity=100);
+		width: 800px;
+		min-height: 60%;
+		margin-right: auto; margin-left: auto;margin-top: 5%;
+	}
+
+    .logoimg img{
+        width: 100px;
+        vertical-align: middle;
+    }
+	</style>
+
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+	<body>
+	<div id="overdiv1" style="display: none;" >
+		<div id="overdiv2">
+			<img src="https://displayalexa.s3-eu-west-1.amazonaws.com/loading.gif">
+		</div>
+	</div>
+
+<!--https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Accenture.svg/800px-Accenture.svg.png-->
+	  <nav class="yellow lighten-2" role="navigation">
+		<div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo" style="color: black">Dog Breed Classifier</a>
+
+          <!--
+          <div class="col s12">
+            <ul class="right logoimg">
+                <li><img class="responsive-img" src="https://miro.medium.com/proxy/1*myMaRWYYzlFYnLfRyqAC3w.png"></li>
+            </ul>
+          </div>
+          -->
+            		</div>
+	  </nav>
+
+ 	<div class="container">
+		<div class="row">
+			<div class="section col s12">
+                <div class="col s12 m6 offset-m3">
+                    <br><br>
+                    <span class="flow-text">Take a picture or upload a photo</span>
+                </div>
+                <div class="input-field col s12 m6 offset-m3">
+<input type="file" name="file" id="file"
+   accept="image/*"
+/>
+                </div>
+                <div class="col s12">
+                    <center><a class="yellow lighten-2 waves-effect waves-light btn-large" style="color: black" onclick="inviaTesto()"><b>SEND</b></a></center>
+                </div>
+                <div class="col s12">
+                    <br>
+                    <center><img id="risultatoImage" src=""></center>
+                    <br>
+                    <span id="risultato"></span>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+  </body>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+	<script language="JavaScript">
+	function showLoading(){
+		$("#overdiv1").show();
+	}
+
+	function hideLoading(){
+		$("#overdiv1").hide();
+	}
+
+	function inviaTesto(){
+		var fd = new FormData();
+        var files = $('#file')[0].files[0];
+        fd.append('file',files);
+
+
+		showLoading();
+
+        $.ajax({
+            type: "POST",
+            url: '/inference',
+            data: fd,
+            contentType: false,
+            processData: false,
+            cache: false,
+            timeout: 6000000,
+            success: function (data) {
+				if(!data && data['error'] != undefined){
+					alert("Error");
+					hideLoading();
+					return;
+				}
+                console.log("SUCCESS : ", data);
+				hideLoading();
+
+                $("#risultato").html("");
+                $("#risultato").append(data['response']);
+                $("#risultatoImage").attr("src", "image/"+ data['name']);
+            },
+            error: function (e) {
+				hideLoading();
+				alert("Error");
+                console.log("ERROR : ", e);
+            }
+        });
+	}
+
+
+
+
+	</script>
+    </body>
+  </html>

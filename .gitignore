@@ -5,6 +5,9 @@
 
 *.pyc
 
+web_app/images
+web_app/haarcascades
+
 #Dataset
 dogImages.zip
 dogImages/

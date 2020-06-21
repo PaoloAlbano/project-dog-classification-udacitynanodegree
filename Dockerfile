@@ -10,6 +10,7 @@ RUN pip install falcon_multipart==0.2.0
 
 ADD requirements.txt /dog/
 WORKDIR /dog
+RUN mkdir -p images/
 RUN pip install --no-cache-dir -r requirements.txt
 
 RUN python download_vgg16.py
