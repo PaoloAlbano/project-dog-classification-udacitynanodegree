@@ -1,27 +1,37 @@
 # Machine Learning Engineer Nanodegree
-## Capstone Project
-Joe Udacity  
-December 31st, 2050
+## **Capstone Project: Dog Breed Classifier**
+Francesco Paolo Albano
+
+22/06/2020
 
 ## I. Definition
-_(approx. 1-2 pages)_
-
 ### Project Overview
-In this section, look to provide a high-level overview of the project in layman’s terms. Questions to ask yourself when writing this section:
-- _Has an overview of the project been provided, such as the problem domain, project origin, and related datasets or input data?_
-- _Has enough background information been given so that an uninformed reader would understand the problem domain and following problem statement?_
+The goal of this project is to develop a model that given an image, it will predict the dog's breed. This model is mounted in a inference pipeline that recognizes if in the photo there is a human face or a dog. If a dog is detected in the image, the dog's breed model is invocated. If a human is detected, it will provide an estimate of the dog breed that is most resembling. If neither is detected in the image, the pipeline will return a message of no prediction. This is a classic computer vision supervised machine learnin problem, targeted to multi class image classification for the dog's breed. The datasets, provided by Udacity, are two, the first is a dataset of dog images divided by breed, the second is a dataset of human faces (the famous flw dataset<sup>1</sup>).
+All the project was executed on a notebook equipped with a CPU i7-7700HQ and a GPU Nvidia Quadro M1200.
 
 ### Problem Statement
-In this section, you will want to clearly define the problem that you are trying to solve, including the strategy (outline of tasks) you will use to achieve the desired solution. You should also thoroughly discuss what the intended solution will be for this problem. Questions to ask yourself when writing this section:
-- _Is the problem statement clearly defined? Will the reader understand what you are expecting to solve?_
-- _Have you thoroughly discussed how you will attempt to solve the problem?_
-- _Is an anticipated solution clearly defined? Will the reader understand what results you are looking for?_
+The inference pipeline needs two different models to solve the problem *Classify the dog's breed from an image sent by a user*. So we need of:
+* Model for human face identification
+* Model for dog identification
+* Model for dog's breed classification
+
+#### Human face identication
+To solve this task, we can simply use a pretrained model based on Haar Cascade Classifier. Haar Cascade is a machine learning object detection algorithm used to identify objects in an image or video and based on the concept of ​​ features proposed by Paul Viola and Michael Jones in their paper "Rapid Object Detection using a Boosted Cascade of Simple Features"<sup>2</sup> in 2001. We have choosen the implementation from OpenCV package<sup>3</sup>. 
+
+#### Model for dog identification
+To identify if an image represents a dog, the pretrained VGG16 will be used. We have choosen the pretrained model from torchvision package <sup>4</sup>. This model is pretrained on ImageNet, a very large, very popular dataset used for image classification and other vision tasks. Looking at the ImageNet dictionary we can find that the categories corresponding to dogs appear in an uninterrupted sequence and correspond to dictionary<sup>5</sup> keys 151-268.
+ 
+
+#### Breed dog classification
+To solve this task, we need a CNN model that is able to distinguish the breed of dog. The first approach is to build and train a CNN model from scratch, but the accuracy obtained was 24% which is resonable because of very simple architecture. Then we have using the tranfer learning to increasy accuracy and speed up the time to training. Using transfer learning on the Resnet18 model, from torchvision package, we are able to achieve 77% with very little effort and few training epochs.
+The choice fell to the ResNet18<sup>6</sup> because have very good performance despite a not very complex model architecture.
 
 ### Metrics
-In this section, you will need to clearly define the metrics or calculations you will use to measure performance of a model or result in your project. These calculations and metrics should be justified based on the characteristics of the problem and problem domain. Questions to ask yourself when writing this section:
-- _Are the metrics you’ve chosen to measure the performance of your models clearly discussed and defined?_
-- _Have you provided reasonable justification for the metrics chosen based on the problem and solution?_
-
+This problem is a supervised classification task. The data is split in train, validation and test. Also there is not requirement to limit false positive or false negavite. So **Accuracy** is a good metric for this king of problem.
+<center><img src="capstone_proposal_images/accuracy.svg"></center>
+Moreover, because the dataset is a little unbalanced, the **F1 score** would produce a more realistic result. The F1 score (or F-score) is the harmonic mean of precion and recall.
+<center><img src="capstone_proposal_images/precision.svg"><img src="capstone_proposal_images/recall.svg"></center>
+<center><img src="capstone_proposal_images/f1score.svg"></center>
 
 ## II. Analysis
 _(approx. 2-4 pages)_
@@ -123,3 +133,12 @@ In this section, you will need to provide discussion as to how one aspect of the
 - Are all the resources used for this project correctly cited and referenced?
 - Is the code that implements your solution easily readable and properly commented?
 - Does the code execute without error and produce results similar to those reported?
+
+
+### Bibliographies
+1) LFW dataset: http://vis-www.cs.umass.edu/lfw/
+2) Rapid Object Detection using a Boosted Cascade of Simple Features:  http://web.iitd.ac.in/~sumeet/viola-cvpr-01.pdf
+3) Haar cascade object detection works: https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html
+4) TorchVision pretrained models: https://pytorch.org/docs/stable/torchvision/models.html
+5) ImageNet dictionary: https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a
+6) ResNet: https://arxiv.org/pdf/1512.03385.pdf
