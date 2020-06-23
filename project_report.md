@@ -2,7 +2,7 @@
 ## **Capstone Project: Dog Breed Classifier**
 Francesco Paolo Albano
 
-22/06/2020
+24/06/2020
 
 ## I. Definition
 ### Project Overview
@@ -20,7 +20,7 @@ To solve this task, we can simply use a pretrained model based on Haar Cascade C
 
 #### Model for dog identification
 To identify if an image represents a dog, the pretrained VGG16 will be used. We have choosen the pretrained model from torchvision package <sup>4</sup>. This model is pretrained on ImageNet, a very large, very popular dataset used for image classification and other vision tasks. Looking at the ImageNet dictionary we can find that the categories corresponding to dogs appear in an uninterrupted sequence and correspond to dictionary<sup>5</sup> keys 151-268.
- 
+
 
 #### Breed dog classification
 To solve this task, we need a CNN model that is able to distinguish the breed of dog. The first approach is to build and train a CNN model from scratch, but the accuracy obtained was 24% which is resonable because of very simple architecture. Then we have using the tranfer learning to increasy accuracy and speed up the time to training. Using transfer learning on the Resnet18 model, from torchvision package, we are able to achieve 77% with very little effort and few training epochs.
@@ -28,53 +28,138 @@ The choice fell to the ResNet18<sup>6</sup> because have very good performance d
 
 ### Metrics
 This problem is a supervised classification task. The data is split in train, validation and test. Also there is not requirement to limit false positive or false negavite. So **Accuracy** is a good metric for this king of problem.
+
 <center><img src="capstone_proposal_images/accuracy.svg"></center>
+
 Moreover, because the dataset is a little unbalanced, the **F1 score** would produce a more realistic result. The F1 score (or F-score) is the harmonic mean of precion and recall.
+
 <center><img src="capstone_proposal_images/precision.svg"><img src="capstone_proposal_images/recall.svg"></center>
+
 <center><img src="capstone_proposal_images/f1score.svg"></center>
 
+<div style="page-break-after: always"></div>
+
 ## II. Analysis
-_(approx. 2-4 pages)_
 
 ### Data Exploration
-In this section, you will be expected to analyze the data you are using for the problem. This data can either be in the form of a dataset (or datasets), input data (or input files), or even an environment. The type of data should be thoroughly described and, if possible, have basic statistics and information presented (such as discussion of input features or defining characteristics about the input or environment). Any abnormalities or interesting qualities about the data that may need to be addressed have been identified (such as features that need to be transformed or the possibility of outliers). Questions to ask yourself when writing this section:
-- _If a dataset is present for this problem, have you thoroughly discussed certain features about the dataset? Has a data sample been provided to the reader?_
-- _If a dataset is present for this problem, are statistics about the dataset calculated and reported? Have any relevant results from this calculation been discussed?_
-- _If a dataset is **not** present for this problem, has discussion been made about the input space or input data for your problem?_
-- _Are there any abnormalities or characteristics about the input space or dataset that need to be addressed? (categorical variables, missing values, outliers, etc.)_
+The dog and human dataset were obtained from Udacity.
+
+#### Dog Dataset
+This dataset<sup>7</sup> contains 8351 images of dog, divided into 133 dog's breed. 
+This dataset is already splitted in:
+- *train*: 6680 images. (**80%**)
+- *validation*: 835 images. (**10%**)
+- *test*: 836 images. (**10%**)
+
+In this histogram we can see the distribution of trainin images among the various dog breeds. With a mean of 50.23 images for dog breed. 
+
+<center><img src="capstone_proposal_images/histogram_dob_breeds.png"></center>
+
+We can see a little imbalancing between dog breed, we will try to reduce the proble using the data augmentation on train images using the (Transforms)[https://pytorch.org/docs/stable/torchvision/transforms.html] of library torchvision.
+
+#### Human Dataset
+This dataset<sup>8</sup>. contains 13234 human images. All images have a shape of 250x250 pixel. We will use this dataset only for test a pre-built model for human face identifier.
 
 ### Exploratory Visualization
-In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant characteristic or feature about the dataset or input data?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
+We can se that there is a big variation in image size. 
+
+We have for the height:
+
+*MIN*: 4003 
+
+*MAX*: 113
+
+*Mean*: 529.04
+
+<center><img src="capstone_proposal_images/histogram_heights.png"></center>
+
+We have for the width:
+
+*MIN*: 4278
+
+*MAX*: 105
+
+*Mean*: 567.03
+
+<center><img src="capstone_proposal_images/histogram_widths.png"></center>
+
 
 ### Algorithms and Techniques
-In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
-- _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_
-- _Are the techniques to be used thoroughly discussed and justified?_
-- _Is it made clear how the input data or datasets will be handled by the algorithms and techniques chosen?_
+
+The task is a common Computer Vision image classification, and a good choice for this type of problem is to use a Convolutional Neural Network. The CNNs are regularized versions of multilayer perceptrons ispired by biological processes of neurons in the visual cortex of some animals like cats. The CNN can tak in an input image, assign importance (learnable weights and biases) to various aspects in the image and be able to differentiate one from the other. 
+Normally a model that use the CNNs is formed by two main block:
+
+* One or more layer of CNN that have the scope of features extraction for the input images.
+* A layer composed by one or more fully connected layer to classify the feature among various classes to choose.
+
+<center><img width=400 src="capstone_proposal_images/Cnn+FullConnected.png"></center>
+
+Moreover, some additional training steps are added in CNN model, and more generally in the neural networks.
+* **Maxpool** layer is used to redecue the dimensionality of input and allowing for assumptions to be made about features contained in the sub-regions.
+* **Dropout** layer is added to avoid overfitting and improve network generalisation.
+* **Batch normalization**<sup>9</sup> that is a technique for improvin the speed and performance of neural network.
+
+Another technique, to achieve good perfomance with very little effort and few training epochs, is the **Transfer Learning**. This is technique where a model developed for a task is reused as the starting point for a model on a second task. Transfer Learning is very popular in computer vision and NLP tasks given the vast computer and time resources required to develop a NN on the problems from the scratch. 
+
+<center><img width=350 src="capstone_proposal_images/transfer_learning.png"></center>
+
+This techniques can be applied with several approches<sup>10</sup>, but the common way to apply transfer learning is take a pretrained network, freeze all layer except the last layer (or the last 2/3 layers), and train only the last layer. In this way you can benefit from the power in features extraction from a complex pretrained network.
+
+In the pipeline the three models are:
+1) Haar cascade classifier for detect human faces.
+2) A pretrained VGG16 model to check if a dog is present in the image.
+3) Create a model, using transfer learning, based on ResNet18 to predict the dog's breed.
+
 
 ### Benchmark
-In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
-- _Has some result or value been provided that acts as a benchmark for measuring performance?_
-- _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_
+For the model that detect human faces, we have tested it on 100 images of human faces and on 100 images from the dog breed dataset. The results are:
+* *Human Faces*: 98% of accuracy
+* *Dog Images*: 10% of accuracy   (**in the dog dataset there are a lot of images where there is also a human in the image with the dog**)
 
+<center><img src="capstone_proposal_images/dog_faces.png"></center>
+
+For the model that check if a dog is present in the image (**dog detector**), we have tested it on the same test used on detect human faces model. The results are:
+* *Human Faces*: founded 0 dogs on 100 images.
+* *Dog Images*: founded 98 dogs on 100 images. Accuracy 98%.
+
+The maximize the performace of this two model, we will put in the pipeline as the first model the dog detector that have high accuracy on find a dog in image.
+
+The breed dog identification requires a custom model as a benchmark. The first model, create from scratch reaches an accuracy of 24% over the 133 classes on the test set, that is greater than the target of 10%. The second model created (using the transfer learning) have better performance, with less effort than the first model. 
+
+The results is:
+
+Accuracy: 77% 
+
+F1-Score: 75.34%
+
+<div style="page-break-after: always"></div>
 
 ## III. Methodology
-_(approx. 3-5 pages)_
 
 ### Data Preprocessing
-In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
-- _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_
-- _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
-- _If no preprocessing is needed, has it been made clear why?_
+Each model requires a different data preprocessing:
+* Human face detector: convert the input image to gray scale using open cv.
+* Dog Detector: normalize the input image using mean=[0.485, 0.456, 0.406] and std=[0.229, 0.224, 0.225], than resize the image to 256x256 pixel and a central crop to get an image of 224x224 pixel. 
+* Dog's breed classifier: for the dog's breed classifier we have applied two differente preprocessing, one for training and another one for test and inference.
+	* For training set we have applied same normalization of dog detector, but we have also applied a random horizontal flip and random rotation to perform data augmentation and improve generalisation of model. As last step we resize the image to 224x224.
+	* For validation/test set and for inference we applied only normalization and resize to 224x224.
+	
 
 ### Implementation
-In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section:
-- _Is it made clear how the algorithms and techniques were implemented with the given datasets or input data?_
-- _Were there any complications with the original metrics or techniques that required changing prior to acquiring a solution?_
-- _Was there any part of the coding process (e.g., writing complicated functions) that should be documented?_
+I will focus on dog's breed model. We have starting creating a first CNN model from scratch. The structure of model is:
+3 layer of CNN, 2 full connected layer. We have used ReLU as activation function, and max pooling on each layer of CNN. 
+The first model created we have created a model without max pooling and batch normalization on last layer, achieving accuracy of 10%. Then adding max polling 2d, batch normalization, increasing output dimension of all CNN layers, with 25 epochs in one hour of training (using GPU) we achieve 24% of accuracy. We have used Stochastic Grandient Descent as optimizer, and Cross Entropy Loss as loss criterion.
+
+```  
+  (conv1): Conv2d            output=64,  kernel_size=(7, 7), stride=(2, 2), padding=(2, 2)
+  (conv2): Conv2d  input=64, output=64,  kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)
+  (conv3): Conv2d  input=64, output=128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)
+  (fc1):   Linear  in_features=21632, out_features=1024, bias=True
+  (fc2):   Linear  in_features=1024, out_features=133, bias=True
+```
+
+The model created with transfer learning is created from ResNet18 pretrained model on ImageNet. We have download the pretrained model from torchvision models, we have removed the last fully connected layer (called **fc**) with a new one with input like the input the default input features, and output 133 as the number of different dog's breed. We loss criterion and the optimizer is the same of model created from scratch.
+
 
 ### Refinement
 In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
@@ -142,3 +227,8 @@ In this section, you will need to provide discussion as to how one aspect of the
 4) TorchVision pretrained models: https://pytorch.org/docs/stable/torchvision/models.html
 5) ImageNet dictionary: https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a
 6) ResNet: https://arxiv.org/pdf/1512.03385.pdf
+7) Dog dataset: https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/dogImages.zip
+8) LFW human faces dataset: https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/lfw.zip
+9) Batch normalization: https://en.wikipedia.org/wiki/Batch_normalization
+10)A Comprehensive Hands-on Guide to Transfer Learning:  https://towardsdatascience.com/a-comprehensive-hands-on-guide-to-transfer-learning-with-real-world-applications-in-deep-learning-212bf3b2f27a
+11)
