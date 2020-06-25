@@ -93,7 +93,7 @@ Normally a model that use the CNNs is formed by two main block:
 * One or more layer of CNN that have the scope of features extraction for the input images.
 * A layer composed by one or more fully connected layer to classify the feature among various classes to choose.
 
-<center><img width=400 src="capstone_proposal_images/Cnn+FullConnected.png"></center>
+<center><img width=500 src="capstone_proposal_images/Cnn+FullConnected.png"></center>
 
 Moreover, some additional training steps are added in CNN model, and more generally in the neural networks.
 * **Maxpool** layer is used to redecue the dimensionality of input and allowing for assumptions to be made about features contained in the sub-regions.
@@ -102,7 +102,7 @@ Moreover, some additional training steps are added in CNN model, and more genera
 
 Another technique, to achieve good perfomance with very little effort and few training epochs, is the **Transfer Learning**. This is technique where a model developed for a task is reused as the starting point for a model on a second task. Transfer Learning is very popular in computer vision and NLP tasks given the vast computer and time resources required to develop a NN on the problems from the scratch. 
 
-<center><img width=350 src="capstone_proposal_images/transfer_learning.png"></center>
+<center><img width=450 src="capstone_proposal_images/transfer_learning.png"></center>
 
 This techniques can be applied with several approches<sup>10</sup>, but the common way to apply transfer learning is take a pretrained network, freeze all layer except the last layer (or the last 2/3 layers), and train only the last layer. In this way you can benefit from the power in features extraction from a complex pretrained network.
 
@@ -178,62 +178,20 @@ Than I have increase the size of CNN layers and with 25 epochs we have reached 2
 I have switched to a pretrained model (ResNet18), and with transfer learning, retraining only the last full connected layer we have reached an accuracy of 77% and F1-Score of 75.34% in only few epochs. 
 
 
-In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
-- _Has an initial solution been found and clearly reported?_
-- _Is the process of improvement clearly documented, such as what techniques were used?_
-- _Are intermediate and final solutions clearly reported as the process is improved?_
-
-
 ## IV. Results
-_(approx. 2-3 pages)_
 
 ### Model Evaluation and Validation
-In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
-- _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
-- _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
-- _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
-- _Can results found from the model be trusted?_
+
+* *Human face identication*: is evaluated with accuracy. We have taken the first 100 images from human faces dataset. The model reaches 98% of accuracy on human faces images.
+* *Dog detector*: is evaluated with accuracy. We have take the first 100 images from human faces and the first 100 images from dog dataset. The model found 0 dogs in human images and reacheas 98% of accuracy on dog images.
+* *Dog's breed classifier*: is evaluated with accuracy and F1-score. We have tested this model on the test set formedy by 836 dog images. The model predict correctly 652 on 836 dog images. This is 77% of accuracy and 75.34% F1 score.
+
 
 ### Justification
-In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
-- _Are the final results found stronger than the benchmark result reported earlier?_
-- _Have you thoroughly analyzed and discussed the final solution?_
-- _Is the final solution significant enough to have solved the problem?_
-
-
-## V. Conclusion
-_(approx. 1-2 pages)_
-
-### Free-Form Visualization
-In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
-
-### Reflection
-In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
-- _Have you thoroughly summarized the entire process you used for this project?_
-- _Were there any interesting aspects of the project?_
-- _Were there any difficult aspects of the project?_
-- _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_
+The output of inference pipeline is better than expected and solved the problem. The benchmark meet the expected results beacause reaches an accuracy of 77% and 75.34% of F1 score compared to CNN model from scratch that reach only 24% of accuracy. 
 
 ### Improvement
-In this section, you will need to provide discussion as to how one aspect of the implementation you designed could be improved. As an example, consider ways your implementation can be made more general, and what would need to be modified. You do not need to make this improvement, but the potential solutions resulting from these changes are considered and compared/contrasted to your current solution. Questions to ask yourself when writing this section:
-- _Are there further improvements that could be made on the algorithms or techniques you used in this project?_
-- _Were there algorithms or techniques you researched that you did not know how to implement, but would consider using if you knew how?_
-- _If you used your final solution as the new benchmark, do you think an even better solution exists?_
-
------------
-
-**Before submitting, ask yourself. . .**
-
-- Does the project report you’ve written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Analysis** and **Methodology**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your analysis, methods, and results?
-- Have you properly proof-read your project report to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
-- Is the code that implements your solution easily readable and properly commented?
-- Does the code execute without error and produce results similar to those reported?
+The model can be definitely improved using a more complex architecture, or using transfer learning on other torchvision model (for example ResNet152 that have more layers that ResNet18, and better performance) , or also trying with more epochs of training adding early stopping to prevent the overfitting.
 
 
 ### Bibliographies
@@ -247,4 +205,3 @@ In this section, you will need to provide discussion as to how one aspect of the
 8) LFW human faces dataset: https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/lfw.zip
 9) Batch normalization: https://en.wikipedia.org/wiki/Batch_normalization
 10)A Comprehensive Hands-on Guide to Transfer Learning:  https://towardsdatascience.com/a-comprehensive-hands-on-guide-to-transfer-learning-with-real-world-applications-in-deep-learning-212bf3b2f27a
-11)
