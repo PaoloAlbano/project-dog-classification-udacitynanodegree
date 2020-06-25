@@ -1,6 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## **Capstone Project: Dog Breed Classifier**
 Francesco Paolo Albano
+Github Repository: [link](https://github.com/PaoloAlbano/project-dog-classification-udacitynanodegree)
 
 24/06/2020
 
@@ -146,6 +147,8 @@ Each model requires a different data preprocessing:
 	
 
 ### Implementation
+
+#### CNN Model
 I will focus on dog's breed model. We have starting creating a first CNN model from scratch. The structure of model is:
 3 layer of CNN, 2 full connected layer. We have used ReLU as activation function, and max pooling on each layer of CNN. 
 The first model created we have created a model without max pooling and batch normalization on last layer, achieving accuracy of 10%. Then adding max polling 2d, batch normalization, increasing output dimension of all CNN layers, with 25 epochs in one hour of training (using GPU) we achieve 24% of accuracy. We have used Stochastic Grandient Descent as optimizer, and Cross Entropy Loss as loss criterion.
@@ -160,8 +163,21 @@ The first model created we have created a model without max pooling and batch no
 
 The model created with transfer learning is created from ResNet18 pretrained model on ImageNet. We have download the pretrained model from torchvision models, we have removed the last fully connected layer (called **fc**) with a new one with input like the input the default input features, and output 133 as the number of different dog's breed. We loss criterion and the optimizer is the same of model created from scratch.
 
+#### Inference Pipeline
+The final algorithm is a function that make a composition of the 3 main models. First, check if is present a dog in the image. If the image contains the dog, the function call the dog's breed classifier and return a message with the predicted class. If the image not contains a dog, the function call check if a human face is present in the image, than the function call the dog's breed classifier to find the dog's breed more similar to the human faces and return a different message.
+
+#### Web App
+The inference pipeline has been inserted in a custom web app, which allows to expose the model and test it from a simple web site. A Dockerfile is provided in the github repository to recreate and deploy in a easy way the web app. Whit this web app is possible to upload an image, or directly take a photo from smartphone.
+
+<center><img src="capstone_proposal_images/website1.png"></center>
+<center><img src="capstone_proposal_images/website2.png"></center>
 
 ### Refinement
+The biggest refinement and work for improvement was been made on CNN model from scratch. The first attempt was done with a single CNN layer and a single linear learner as output layer. But this network is too simple to learn from out dataset and the loss score remaining unchanged. Than I brough the number of CNN layer to 3 and 2 Linear Learner. I have added Max pool layer and batch normalization. With this architecture, in 15 epochs we reached 13% of accuracy.
+Than I have increase the size of CNN layers and with 25 epochs we have reached 24% of accuracy.
+I have switched to a pretrained model (ResNet18), and with transfer learning, retraining only the last full connected layer we have reached an accuracy of 77% and F1-Score of 75.34% in only few epochs. 
+
+
 In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
 - _Has an initial solution been found and clearly reported?_
 - _Is the process of improvement clearly documented, such as what techniques were used?_
