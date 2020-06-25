@@ -2,6 +2,27 @@
 Cloned from [Udacity repo](https://github.com/udacity/deep-learning-v2-pytorch/tree/master/project-dog-classification)
 
 
+## Installation
+
+Clone this project and install all the requirements
+	```	
+	git clone https://github.com/PaoloAlbano/project-dog-classification-udacitynanodegree
+	pip install -r requirements.txt
+	pip install jupyter
+	```
+Then ran the jupyter notebook.
+
+To run the webapp, you can build with docker:
+
+	```	
+	git clone https://github.com/PaoloAlbano/project-dog-classification-udacitynanodegree
+	docker build -t dog-classifier:latest .
+	docker run -it -p 8080:8080 dog-classifier:latest
+	```
+
+Now go with browser to http://localhost:8080
+
+
 
 [//]: # (Image References)
 

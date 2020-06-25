@@ -3,9 +3,11 @@
 Francesco Paolo Albano
 Github Repository: [link](https://github.com/PaoloAlbano/project-dog-classification-udacitynanodegree)
 
-24/06/2020
+Web App link: http://34.90.209.163:8080
 
-## I. Definition
+25/06/2020
+
+## I. Definition 
 ### Project Overview
 The goal of this project is to develop a model that given an image, it will predict the dog's breed. This model is mounted in a inference pipeline that recognizes if in the photo there is a human face or a dog. If a dog is detected in the image, the dog's breed model is invocated. If a human is detected, it will provide an estimate of the dog breed that is most resembling. If neither is detected in the image, the pipeline will return a message of no prediction. This is a classic computer vision supervised machine learnin problem, targeted to multi class image classification for the dog's breed. The datasets, provided by Udacity, are two, the first is a dataset of dog images divided by breed, the second is a dataset of human faces (the famous flw dataset<sup>1</sup>).
 All the project was executed on a notebook equipped with a CPU i7-7700HQ and a GPU Nvidia Quadro M1200.
@@ -93,7 +95,7 @@ Normally a model that use the CNNs is formed by two main block:
 * One or more layer of CNN that have the scope of features extraction for the input images.
 * A layer composed by one or more fully connected layer to classify the feature among various classes to choose.
 
-<center><img width=500 src="capstone_proposal_images/Cnn+FullConnected.png"></center>
+<center><img width=600 src="capstone_proposal_images/Cnn+FullConnected.png"></center>
 
 Moreover, some additional training steps are added in CNN model, and more generally in the neural networks.
 * **Maxpool** layer is used to redecue the dimensionality of input and allowing for assumptions to be made about features contained in the sub-regions.
@@ -102,7 +104,7 @@ Moreover, some additional training steps are added in CNN model, and more genera
 
 Another technique, to achieve good perfomance with very little effort and few training epochs, is the **Transfer Learning**. This is technique where a model developed for a task is reused as the starting point for a model on a second task. Transfer Learning is very popular in computer vision and NLP tasks given the vast computer and time resources required to develop a NN on the problems from the scratch. 
 
-<center><img width=450 src="capstone_proposal_images/transfer_learning.png"></center>
+<center><img width=550 src="capstone_proposal_images/transfer_learning.png"></center>
 
 This techniques can be applied with several approches<sup>10</sup>, but the common way to apply transfer learning is take a pretrained network, freeze all layer except the last layer (or the last 2/3 layers), and train only the last layer. In this way you can benefit from the power in features extraction from a complex pretrained network.
 
@@ -170,6 +172,7 @@ The final algorithm is a function that make a composition of the 3 main models. 
 The inference pipeline has been inserted in a custom web app, which allows to expose the model and test it from a simple web site. A Dockerfile is provided in the github repository to recreate and deploy in a easy way the web app. Whit this web app is possible to upload an image, or directly take a photo from smartphone.
 
 <center><img src="capstone_proposal_images/website1.png"></center>
+<br>
 <center><img src="capstone_proposal_images/website2.png"></center>
 
 ### Refinement
@@ -177,6 +180,7 @@ The biggest refinement and work for improvement was been made on CNN model from 
 Than I have increase the size of CNN layers and with 25 epochs we have reached 24% of accuracy.
 I have switched to a pretrained model (ResNet18), and with transfer learning, retraining only the last full connected layer we have reached an accuracy of 77% and F1-Score of 75.34% in only few epochs. 
 
+<div style="page-break-after: always"></div>
 
 ## IV. Results
 
